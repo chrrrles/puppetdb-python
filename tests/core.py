@@ -18,9 +18,9 @@ from puppetdb.core import PuppetDBClient
 import json
 import helpers
 
-class PuppetDBClientTestCase(unittest.TestCase):
+class PuppetDBClientTestCaseV2(unittest.TestCase):
     def setUp(self):
-        self._client = PuppetDBClient()
+        self._client = PuppetDBClient(api_version='v2')
 
     def tearDown(self):
         pass
