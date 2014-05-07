@@ -142,7 +142,7 @@ class PuppetDBClientTestCaseV2(unittest.TestCase):
         self.assertEqual(fact_0.get('value'), '3.2.34')
 
 
- class PuppetDBClientTestCaseV3(unittest.TestCase):
+class PuppetDBClientTestCaseV3(unittest.TestCase):
     def setUp(self):
         self._client = PuppetDBClient(api_version='v3')
 
