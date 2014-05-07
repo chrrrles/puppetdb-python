@@ -93,3 +93,6 @@ class PuppetDBClient(object):
 
     def get_event_counts(self, query='', summarize_by='', count_by='', counts_filter='', distinct_resources=''):
         return self._api.event_counts.get_event_counts(self._api_url, query, summarize_by, count_by, counts_filter, distinct_resources,self._verify, self._cert)
+
+   def get_aggregate_event_counts(self, query='', summarize_by='', count_by='', counts_filter='', distinct_resources=''):
+        return self._api.aggregate_event_counts.get_aggregate_event_counts(self._api_url, query, summarize_by, count_by, counts_filter, distinct_resources,self._verify, self._cert)
