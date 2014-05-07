@@ -15,5 +15,5 @@ from core import PuppetDBClientTestCaseV2
 
 def all_tests():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(PuppetDBClientTestCase))
+    suite.addTest(unittest.makeSuite(PuppetDBClientTestCaseV2))
     return suite
