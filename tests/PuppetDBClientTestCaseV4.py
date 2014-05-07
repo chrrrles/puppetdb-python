@@ -1,30 +1,43 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 # Copyright (c) 2013 Arcus, Inc.
 #
-# Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
-# associated documentation files (the "Software"), to deal in the Software without restriction, including
-# without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
-# sell copies of the Software, and to permit persons to whom the Software is furnished to do so,
-# subject to the following conditions:
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
 #
-# The above copyright notice and this permission notice shall be included in all copies or substantial portions
-# of the Software.
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
 #
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT
-# NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-# IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
-# WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
-# OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+
+"""PuppetDBClientTestCaseV3.py: A bunch of unittests for testing this module."""
+
+__author__ = "monkee"
+__version__ = "1.0.1"
+__maintainer__ = "monk-ee"
+__email__ = "magic.monkee.magic@gmail.com"
+__status__ = "Development"
+
+
 import unittest
-from mock import MagicMock, patch
-import requests
+from mock import patch
 from puppetdb.core import PuppetDBClient
-import json
 import helpers
 
-class PuppetDBClientTestCase(unittest.TestCase):
+
+class PuppetDBClientTestCaseV4(unittest.TestCase):
     def setUp(self):
-        self._client = PuppetDBClient()
+        self._client = PuppetDBClient(api_version='v4')
 
     def tearDown(self):
         pass
@@ -144,4 +157,11 @@ class PuppetDBClientTestCase(unittest.TestCase):
         self.assertEqual(fact_0.get('name'), 'kernelversion')
         self.assertTrue(fact_0.has_key('value'))
         self.assertEqual(fact_0.get('value'), '3.2.34')
-    
+
+    @patch('puppetdb.utils.api_request')
+    def test_get_catalog(self, get):
+        get.side_effect = helpers.mock_api_request
+        resp = self._client.get_catalog('host1')
+        self.assertNotEqual(len(resp), 0)
+        cat_0 = resp[0]
+        self.assertTrue(cat_0.has_key('metadata'))

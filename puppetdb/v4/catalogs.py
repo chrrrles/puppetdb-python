@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-"""helpers.py: These are helper mock functions for testing this module."""
+"""resources.py: A bunch of API methods for interacting with v4 catalogs in the PuppetDB API."""
 
 __author__ = "monkee"
 __version__ = "1.0.1"
@@ -28,21 +28,17 @@ __maintainer__ = "monk-ee"
 __email__ = "magic.monkee.magic@gmail.com"
 __status__ = "Development"
 
-from mock import Mock
-import v2_fixtures,v3_fixtures,v4_fixtures
-import json
+from puppetdb import utils
 
-def mock_api_request(host_url=None, path=None, *args, **kwargs):
-    resp = Mock()
-    # HACK: find the api version in url
-    data = None
-    if host_url.find('v2') > -1:
-        data = v2_fixtures.v2().get(path)
-    elif host_url.find('v3') > -1:
-        data = v3_fixtures.v3().get(path)
-    elif host_url.find('v4') > -1:
-        data = v4_fixtures.v4().get(path)
+API_VERSION = 'v3'
 
-    resp.content = json.dumps(data)
-    resp.headers = kwargs.get('headers')
-    return resp
+def get_catalog(api_url=None, node_name=None, verify=False, cert=list()):
+    """
+    Returns catalogs by node
+
+    :param api_url: Base PuppetDB API url
+    :param node_name: Name of node
+
+    """
+    return utils._make_api_request(api_url, '/catalogs/{0}'.format(node_name), verify, cert)
+

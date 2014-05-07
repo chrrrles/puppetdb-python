@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-"""helpers.py: These are helper mock functions for testing this module."""
+"""metrics.py: A bunch of API methods for interacting with v4 metrics in the PuppetDB API."""
 
 __author__ = "monkee"
 __version__ = "1.0.1"
@@ -28,21 +28,25 @@ __maintainer__ = "monk-ee"
 __email__ = "magic.monkee.magic@gmail.com"
 __status__ = "Development"
 
-from mock import Mock
-import v2_fixtures,v3_fixtures,v4_fixtures
-import json
+from puppetdb import utils
 
-def mock_api_request(host_url=None, path=None, *args, **kwargs):
-    resp = Mock()
-    # HACK: find the api version in url
-    data = None
-    if host_url.find('v2') > -1:
-        data = v2_fixtures.v2().get(path)
-    elif host_url.find('v3') > -1:
-        data = v3_fixtures.v3().get(path)
-    elif host_url.find('v4') > -1:
-        data = v4_fixtures.v4().get(path)
+API_VERSION = 'v3'
 
-    resp.content = json.dumps(data)
-    resp.headers = kwargs.get('headers')
-    return resp
+def get_all_metric_names(api_url=None, verify=False, cert=list()):
+    """
+    Returns all available metric names
+
+    :param api_url: Base PuppetDB API url
+
+    """
+    return utils._make_api_request(api_url, '/metrics/mbeans', verify, cert)
+
+def get_metric(api_url=None, metric_name=None, verify=False, cert=list()):
+    """
+    Returns info for a Node
+
+    :param api_url: Base PuppetDB API url
+    :param metric_name: Name of metric
+
+    """
+    return utils._make_api_request(api_url, '/metrics/mbean/{0}'.format(metric_name), verify, cert)

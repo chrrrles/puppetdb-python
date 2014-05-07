@@ -21,18 +21,13 @@
 # THE SOFTWARE.
 
 """
-facts.py: A bunch of API methods for interacting with v4 facts in the PuppetDB API.
+environments.py: A bunch of API methods for interacting with v4 facts in the PuppetDB API.
 
 Successful responses will be in application/json. Errors will be returned as non-JSON strings.
 
-The result will be a JSON array, with one entry per fact. Each entry is of the form:
+The response is a JSON array of hashes of the form:
 
-Generic Response Type
-{
-  "certname": <node name>,
-  "name": <fact name>,
-  "value": <fact value>
-}
+{"name": <string>}
 """
 
 __author__ = "monkee"
@@ -45,44 +40,45 @@ from puppetdb import utils
 
 API_VERSION = 'v4'
 
-def get_facts(api_url=None, query='', verify=False, cert=list()):
+def get_environments(api_url=None, query='', verify=False, cert=list()):
     """
-    Returns facts
+    Returns environments
 
     :param api_url: Base PuppetDB API url
     :param query: Optional. A JSON array containing the query in prefix notation. If not provided, all results will be returned.
 
-    Response
-    [{"certname": "a.example.com", "name": "operatingsystem", "value": "Debian"},
-    {"certname": "b.example.com", "name": "operatingsystem", "value": "RedHat"},
-    {"certname": "c.example.com", "name": "operatingsystem", "value": "Darwin"}]
-    """
-    return utils._make_api_request(api_url, '/facts', verify, cert, params={'query': query})
+    Available Fields
+    "name": matches environments of the given name
 
-def get_facts_by_name(api_url=None, fact_name=None, verify=False, cert=list()):
+    Response
+    {"name": <string>}
     """
-    Returns facts by name
+    return utils._make_api_request(api_url, '/environments', verify, cert, params={'query': query})
+
+def get_environments_by_name(api_url=None, environment_name=None, verify=False, cert=list()):
+    """
+    Returns environments by name
 
     :param api_url: Base PuppetDB API url
-    :param fact_name: Name of fact
+    :param environment_name: Name of environment
 
     Response
-    [{"certname": "a.example.com", "name": "operatingsystem", "value": "Debian"},
-    {"certname": "b.example.com", "name": "operatingsystem", "value": "Redhat"},
-    {"certname": "c.example.com", "name": "operatingsystem", "value": "Ubuntu"}]
+    {"name": <string>}]
     """
-    return utils._make_api_request(api_url, '/facts/{0}'.format(fact_name), verify, cert)
+    return utils._make_api_request(api_url, '/environments/{0}'.format(environment_name), verify, cert)
 
-def get_facts_by_name_and_value(api_url=None, fact_name=None, fact_value=None, verify=False, cert=list()):
+def get_environments_by_route(api_url=None, environment_name=None, route='', query='', verify=False, cert=list()):
     """
-    Returns facts by name and value
+    These routes are identical to issuing a request to /v4/[events|facts|reports|resources], with a query parameter of
+    ["=","environment","<ENVIRONMENT>"].
+    All query parameters and route suffixes from the original routes are supported. The result format is also the same.
+    Additional query parameters are ANDed with the environment clause. See /v4/events, /v4/facts, /v4/reports or /v4/resources for more info.
 
     :param api_url: Base PuppetDB API url
-    :param fact_name: Name of fact
-    :param fact_value: Value of fact
+    :param environment_name: Name of environment
+    :param route: [events|facts|reports|resources]
 
     Response
-    [{"certname": "a.example.com", "name": "operatingsystem", "value": "Debian"},
-    {"certname": "b.example.com", "name": "operatingsystem", "value": "Debian}]
+    As per other routes
     """
-    return utils._make_api_request(api_url, '/facts/{0}/{1}'.format(fact_name, fact_value), verify, cert)
+    return utils._make_api_request(api_url, '/environments/{0}/{1}'.format(environment_name, route), verify, cert, params={'query': query})
