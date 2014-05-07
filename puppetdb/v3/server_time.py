@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-"""fact_names.py: A bunch of API methods for interacting with v3 fact_names in the PuppetDB API."""
+"""fact_names.py: A bunch of API methods for interacting with v3 server time in the PuppetDB API."""
 
 __author__ = "monkee"
 __license__ = "GPL"
@@ -14,14 +14,17 @@ from puppetdb import utils
 
 API_VERSION = 'v3'
 
-def get_fact_names(api_url=None, verify=False, cert=list()):
+def get_server_time(api_url=None, verify=False, cert=list()):
     """
     Returns fact names
 
     :param api_url: Base PuppetDB API url
 
     Response
-    [<fact>, <fact>, ..., <fact>, <fact>]
+
+    {
+        "server-time": "2013-09-20T20:54:27.472Z"
+    }
     """
-    return utils._make_api_request(api_url, '/fact-names', verify, cert)
+    return utils._make_api_request(api_url, '/server-time', verify, cert)
 
