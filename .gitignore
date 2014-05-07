@@ -10,3 +10,4 @@ newrelic.ini
 *dist/*
 .pydevproject
 .project
+.idea
