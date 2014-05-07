@@ -87,3 +87,9 @@ class PuppetDBClient(object):
 
     def get_reports(self, query=''):
         return self._api.reports.get_reports(self._api_url, query, self._verify, self._cert)
+
+    def get_events(self, query=''):
+        return self._api.events.get_events(self._api_url, query, self._verify, self._cert)
+
+    def get_event_counts(self, query='', summarize_by='', count_by='', counts_filter='', distinct_resources=''):
+        return self._api.event_counts.get_event_counts(self._api_url, query, summarize_by, count_by, counts_filter, distinct_resources,self._verify, self._cert)

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-"""facts.py: A bunch of API methods for interacting with v3 reports in the PuppetDB API."""
+"""facts.py: A bunch of API methods for interacting with v3 events in the PuppetDB API."""
 
 __author__ = "monkee"
 __license__ = "GPL"
@@ -14,11 +14,11 @@ from puppetdb import utils
 
 API_VERSION = 'v3'
 
-def get_reports(api_url=None, query='', verify=False, cert=list()):
+def get_events(api_url=None, query='', verify=False, cert=list()):
     """
-    Returns reports
+    Returns facts
 
     :param api_url: Base PuppetDB API url
 
     """
-    return utils._make_api_request(api_url, '/reports', verify, cert, params={'query': query})
+    return utils._make_api_request(api_url, '/events', verify, cert, params={'query': query})
