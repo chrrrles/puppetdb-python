@@ -11,7 +11,7 @@ __email__ = "magic.monkee.magic@gmail.com"
 __status__ = "Development"
 
 import unittest
-from core import PuppetDBClientTestCase
+from core import PuppetDBClientTestCaseV2
 
 def all_tests():
     suite = unittest.TestSuite()
