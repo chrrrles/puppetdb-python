@@ -20,7 +20,7 @@
 # THE SOFTWARE.
 from puppetdb import utils
 
-API_VERSION = 'v2'
+API_VERSION = 'v4'
 
 def get_nodes(api_url=None, verify=False, cert=list()):
     """

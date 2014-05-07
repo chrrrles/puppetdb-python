@@ -24,4 +24,4 @@ try:
 except ImportError:
     import json
 
-API_VERSION = 'v2'
+API_VERSION = 'v4'
