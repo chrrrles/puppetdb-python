@@ -72,3 +72,12 @@ class PuppetDBClient(object):
 
     def get_catalog(self, node_name):
         return self._api.catalogs.get_catalog(self._api_url, node_name, self._verify, self._cert)
+
+    def get_resources(self, query=''):
+        return self._api.resources.get_resources(self._api_url, query, self._verify, self._cert)
+
+    def get_resources_by_name(self, resource_name):
+        return self._api.resources.get_resources_by_name(self._api_url, resource_name, self._verify, self._cert)
+
+    def get_resources_by_name_and_value(self, resource_name, resource_value):
+        return self._api.resources.get_resources_by_name_and_value(self._api_url, resource_name, resource_value, self._verify, self._cert)

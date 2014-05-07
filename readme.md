@@ -5,8 +5,8 @@ Python interface to [PuppetDB](http://docs.puppetlabs.com/puppetdb/1.1/index.htm
 
 Added Support for API versions
 
-* v2
-* v3 (This is the Default as of 5/5/2014)
+* v2 (Deprecated)
+* v3 (This is the Default as of 6/5/2014)
 * v4 (Experimental)
 
 # Usage
@@ -51,8 +51,7 @@ For connections to a remote PuppetDB host, you have to authenticate using SSL an
 
 # ToDo
 
-* Resources Endpoint
-* Metrics Endpoint
+* Proper paging support
 * Query support
 
 # Contributing
