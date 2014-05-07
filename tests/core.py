@@ -264,3 +264,11 @@ class PuppetDBClientTestCaseV3(unittest.TestCase):
         self.assertEqual(fact_0.get('name'), 'kernelversion')
         self.assertTrue(fact_0.has_key('value'))
         self.assertEqual(fact_0.get('value'), '3.2.34')
+
+    @patch('puppetdb.utils.api_request')
+    def test_get_catalog(self, get):
+        get.side_effect = helpers.mock_api_request
+        resp = self._client.get_catalog('host1')
+        self.assertNotEqual(len(resp), 0)
+        cat_0 = resp[0]
+        self.assertTrue(cat_0.has_key('metadata'))

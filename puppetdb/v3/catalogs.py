@@ -14,7 +14,7 @@ from puppetdb import utils
 
 API_VERSION = 'v3'
 
-def get_catalogs(api_url=None, node_name=None, verify=False, cert=list()):
+def get_catalog(api_url=None, node_name=None, verify=False, cert=list()):
     """
     Returns catalogs by node
 

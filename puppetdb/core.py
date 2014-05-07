@@ -69,4 +69,6 @@ class PuppetDBClient(object):
     
     def get_facts_by_name_and_value(self, fact_name, fact_value):
         return self._api.facts.get_facts_by_name_and_value(self._api_url, fact_name, fact_value, self._verify, self._cert)
-    
+
+    def get_catalog(self, node_name):
+        return self._api.catalogs.get_catalog(self._api_url, node_name, self._verify, self._cert)

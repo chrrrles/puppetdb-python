@@ -226,7 +226,47 @@ def v3():
                 'value': '3.2.34',
             }
         ],
+        '/catalogs/host1': [
+            {
+                "metadata": {
+                    "api_version": 1
+                },
+                "data": {
+                    "transaction-uuid": "a9f466d1-6057-4ae3-9ed8-ea8d8c558ff3",
+                    "version": "1399421807",
+                    "name": "host1",
+                    "resources": [
+                        {
+                            "tags": [ "default", "node", "begin", "ntp", "bootstrap", "anchor", "class", "ntp::begin"],
+                            "file": "/etc/puppet/modules/ntp/manifests/init.pp",
+                            "type": "Anchor",
+                            "title": "ntp::begin",
+                            "line": 50,
+                            "parameters": {
+                                "before": "Class[Ntp::Install]"
+                            },
+                            "exported": False
+                        }
+                    ],
+                    "edges": [
+                        {
+                            "source": {
+                                "type": "Class",
+                                "title": "main"
+                            },
+                            "target": {
+                                "type": "Filebucket",
+                                "title": "main"
+                            },
+                            "relationship": "contains"
+                        }
+                    ]
+                }
+            }
+        ]
     }
+
+
 def v4():
     return {
         '/nodes': [

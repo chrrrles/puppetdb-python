@@ -11,3 +11,6 @@ __email__ = "magic.monkee.magic@gmail.com"
 __status__ = "Development"
 import nodes
 import facts
+import catalogs
+import metrics
+import resources
