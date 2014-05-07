@@ -16,7 +16,7 @@ API_VERSION = 'v3'
 
 def get_resources(api_url=None, query='', verify=False, cert=list()):
     """
-    Returns facts
+    Returns resources
 
     :param api_url: Base PuppetDB API url
 
