@@ -21,6 +21,8 @@
 
 import utils
 import v2
+import v3
+import v4
 
 class ClientException(BaseException):
     pass
@@ -29,7 +31,7 @@ class AuthException(BaseException):
     pass
 
 class PuppetDBClient(object):
-    def __init__(self, host='localhost', port=8080, api_version='v2',
+    def __init__(self, host='localhost', port=8080, api_version='v3',
         use_ssl=False, verify=True, cert=list()):
         self._host = host
         self._port = port
@@ -40,6 +42,8 @@ class PuppetDBClient(object):
         }
         apis = {
             'v2': v2,
+            'v3': v3,
+            'v4': v4,
         }
         self._api = apis[api_version]
         self._verify = verify
