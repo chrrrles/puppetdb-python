@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-"""resources.py: A bunch of API methods for interacting with v3 resources in the PuppetDB API."""
+"""resources.py: A bunch of API methods for interacting with v3 catalogs in the PuppetDB API."""
 
 __author__ = "monkee"
 __license__ = "GPL"
