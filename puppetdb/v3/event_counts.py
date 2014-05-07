@@ -25,5 +25,63 @@ def get_event_counts(api_url=None, query='', summarize_by='', count_by='', count
     :param counts_filter: Optional. A JSON array of query predicates in the usual prefix form. This query is applied to the final event counts output. Supported operators are =, >, <, >=, and <=. Supported fields are failures, successes, noops, and skips.
     :param distinct_resources: Optional. (EXPERIMENTAL: it is possible that the behavior of this parameter may change in future releases.) This parameter is passed along to the event query - see there for additional documentation.
 
+    Response
+    When summarizing by certname, the subject will contain a title key:
+    [
+      {
+        "subject-type": "certname",
+        "subject": { "title": "foo.local" },
+        "failures": 0,
+        "successes": 2,
+        "noops": 0,
+        "skips": 1
+      },
+      {
+        "subject-type": "certname",
+        "subject": { "title": "bar.local" },
+        "failures": 1,
+        "successes": 0,
+        "noops": 0,
+        "skips": 1
+      }
+    ]
+    When summarizing by resource, the subject will contain a type and title key:
+    [
+      {
+        "subject-type": "resource",
+        "subject": { "type": "Notify", "title": "Foo happened" },
+        "failures": 0,
+        "successes": 1,
+        "noops": 0,
+        "skips": 0
+      },
+      {
+        "subject-type": "resource",
+        "subject": { "type": "Notify", "title": "Bar happened" },
+        "failures": 0,
+        "successes": 0,
+        "noops": 0,
+        "skips": 1
+      }
+    ]
+    When summarizing by containing-class, the subject will contain a title key:
+    [
+      {
+        "subject-type": "containing-class",
+        "subject": { "title": "Foo::Class" },
+        "failures": 1,
+        "successes": 2,
+        "noops": 0,
+        "skips": 1
+      },
+      {
+        "subject-type": "containing-class",
+        "subject": { "title": null },
+        "failures": 0,
+        "successes": 0,
+        "noops": 2,
+        "skips": 0
+      }
+    ]
     """
     return utils._make_api_request(api_url, '/event-counts', verify, cert, params={'query': query,'summarize-by':summarize_by,'count-by':count_by,'counts-filter':counts_filter,'distinct_resources':distinct_resources})
