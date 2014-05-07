@@ -8,6 +8,11 @@ def mock_api_request(host_url=None, path=None, *args, **kwargs):
     data = None
     if host_url.find('v2') > -1:
         data = fixtures.v2().get(path)
+    elif host_url.find('v3') > -1:
+        data = fixtures.v3().get(path)
+    elif host_url.find('v4') > -1:
+        data = fixtures.v4().get(path)
+
     resp.content = json.dumps(data)
     resp.headers = kwargs.get('headers')
     return resp
