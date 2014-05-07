@@ -81,3 +81,9 @@ class PuppetDBClient(object):
 
     def get_resources_by_name_and_value(self, resource_name, resource_value):
         return self._api.resources.get_resources_by_name_and_value(self._api_url, resource_name, resource_value, self._verify, self._cert)
+
+    def get_fact_names(self):
+        return self._api.fact_names.get_fact_names(self._api_url, self._verify, self._cert)
+
+    def get_reports(self, query=''):
+        return self._api.reports.get_reports(self._api_url, query, self._verify, self._cert)
