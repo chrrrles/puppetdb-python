@@ -23,4 +23,12 @@ def get_all_metric_names(api_url=None, verify=False, cert=list()):
     """
     return utils._make_api_request(api_url, '/metrics/mbeans', verify, cert)
 
+def get_metric(api_url=None, metric_name=None, verify=False, cert=list()):
+    """
+    Returns info for a Node
 
+    :param api_url: Base PuppetDB API url
+    :param metric_name: Name of metric
+
+    """
+    return utils._make_api_request(api_url, '/metrics/mbean/{0}'.format(metric_name), verify, cert)
