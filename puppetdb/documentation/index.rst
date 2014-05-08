@@ -9,9 +9,11 @@ Welcome to python-puppetdb's documentation!
 Contents:
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 4
 
-
+   puppetdb
+   setup
+   tests
 
 Indices and tables
 ==================
