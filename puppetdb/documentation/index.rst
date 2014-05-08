@@ -12,8 +12,10 @@ Contents:
    :maxdepth: 4
 
    puppetdb
-   setup
-   tests
+   puppetdb.v2
+   puppetdb.v3
+   puppetdb.v4
+   modules
 
 Indices and tables
 ==================
