@@ -25,7 +25,7 @@ __status__ = "Development"
 
 from puppetdb import utils
 
-API_VERSION = 'v3'
+API_VERSION = 'v4'
 
 def get_facts(api_url=None, query='', verify=False, cert=list()):
     """
