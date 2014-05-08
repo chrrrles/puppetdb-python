@@ -102,3 +102,12 @@ class PuppetDBClient(object):
 
     def get_version(self):
         return self._api.version.get_version(self._api_url, self._verify, self._cert)
+
+    def get_environments(self, query=''):
+        return self._api.environments.get_environments(self._api_url, query, self._verify, self._cert)
+
+    def get_environments_by_name(self, environment_name):
+        return self._api.enviroments.get_environemnts_by_name(self._api_url, environment_name, self._verify, self._cert)
+
+    def get_environments_by_route(self, environment_name, route, query):
+        return self._api.environments.get_resources_by_route(self._api_url, environment_name, route, query, self._verify, self._cert)
