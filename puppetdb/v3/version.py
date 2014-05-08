@@ -24,7 +24,7 @@ API_VERSION = 'v3'
 
 def get_version(api_url=None, verify=False, cert=list()):
     """
-    Returns fact names
+    Returns server version
 
     :param api_url: Base PuppetDB API url
 
