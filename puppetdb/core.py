@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-"""core.py: The core of this module"""
+"""PuppetDBClientTestCaseV3.py: The core of this module"""
 
 __author__ = "monkee"
 __license__ = "GPL"
