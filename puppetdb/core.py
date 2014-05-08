@@ -99,3 +99,6 @@ class PuppetDBClient(object):
 
     def get_server_time(self):
         return self._api.server_time.get_server_time(self._api_url, self._verify, self._cert)
+
+    def get_version(self):
+        return self._api.version.get_version(self._api_url, self._verify, self._cert)
