@@ -124,6 +124,11 @@ def v3():
                 'value': '3.2.34',
             }
         ],
+         '/version': [
+            {
+                "version" : "2.0.0",
+            }
+        ],
         '/catalogs/host1': [
             {
                 "metadata": {

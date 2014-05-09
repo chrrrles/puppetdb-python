@@ -147,3 +147,12 @@ class PuppetDBClientTestCaseV3(unittest.TestCase):
         self.assertNotEqual(len(resp), 0)
         cat_0 = resp[0]
         self.assertTrue(cat_0.has_key('metadata'))
+
+    @patch('puppetdb.utils.api_request')
+    def test_get_version(self, get):
+        get.side_effect = helpers.mock_api_request
+        resp = self._client.get_version()
+        self.assertNotEqual(len(resp), 0)
+        ver_0 = resp[0]
+        self.assertTrue(ver_0.has_key('version'))
+        self.assertEqual(ver_0.get('version'), '2.0.0')
