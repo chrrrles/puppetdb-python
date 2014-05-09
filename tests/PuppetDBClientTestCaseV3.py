@@ -191,6 +191,5 @@ class PuppetDBClientTestCaseV3(unittest.TestCase):
         resp = self._client.get_metric_by_name('JMImplementation%3Atype%3DMBeanServerDelegate')
         self.assertNotEqual(len(resp), 0)
         mn_0 = resp[0]
-        print mn_0
         self.assertTrue(mn_0.has_key('MBeanServerId'))
         self.assertEqual(mn_0.get('MBeanServerId'), 'puppetmaster_1399427297187')
