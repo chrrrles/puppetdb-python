@@ -104,7 +104,7 @@ class PuppetDBClient(object):
         return self._api.metrics.get_metric_names(self._api_url, self._verify, self._cert)
 
     def get_metrics_by_name(self, metric_name):
-        return self._api.metrics.get_metric_by_name(self._api_url, metric_name, self._verify, self._cert)
+        return self._api.metrics.get_metrics_by_name(self._api_url, metric_name, self._verify, self._cert)
 
     def get_version(self):
         return self._api.version.get_version(self._api_url, self._verify, self._cert)
