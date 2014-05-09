@@ -22,6 +22,7 @@ from puppetdb import utils
 
 API_VERSION = 'v3'
 
+
 def get_version(api_url=None, verify=False, cert=list()):
     """
     Returns server version
