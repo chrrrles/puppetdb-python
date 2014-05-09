@@ -193,3 +193,19 @@ class PuppetDBClientTestCaseV3(unittest.TestCase):
         mn_0 = resp[0]
         self.assertTrue(mn_0.has_key('MBeanServerId'))
         self.assertEqual(mn_0.get('MBeanServerId'), 'puppetmaster_1399427297187')
+
+    @patch('puppetdb.utils.api_request')
+    def test_get_reports(self, get):
+        get.side_effect = helpers.mock_api_request
+        resp = self._client.get_reports('["=", "certname", "puppetmaster.local"]')
+        self.assertEqual(len(resp), 2)
+        rep_0 = resp[0]
+        self.assertTrue(rep_0.has_key('configuration-version'))
+        self.assertEqual(rep_0.get('configuration-version'), '1399421807')
+        self.assertTrue(rep_0.has_key('hash'))
+        self.assertEqual(rep_0.get('hash'), '79b322fe816132cdbf537048a081764955fe175e')
+        rep_1 = resp[1]
+        self.assertTrue(rep_1.has_key('configuration-version'))
+        self.assertEqual(rep_1.get('configuration-version'), '1399421807')
+        self.assertTrue(rep_1.has_key('hash'))
+        self.assertEqual(rep_1.get('hash'), '50008ca41657d480425eb6961b91d84889e6ce84')

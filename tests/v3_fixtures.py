@@ -277,6 +277,29 @@ def v3():
               "ImplementationVendor" : "Oracle Corporation"
             }
         ],
+        '/reports': [
+            {
+              "hash" : "79b322fe816132cdbf537048a081764955fe175e",
+              "puppet-version" : "3.5.1",
+              "receive-time" : "2014-05-07T00:25:42.867Z",
+              "report-format" : 4,
+              "start-time" : "2014-05-07T00:25:40.988Z",
+              "end-time" : "2014-05-07T00:25:41.803Z",
+              "transaction-uuid" : "a9f466d1-6057-4ae3-9ed8-ea8d8c558ff3",
+              "configuration-version" : "1399421807",
+              "certname" : "puppetmaster.local"
+            }, {
+              "hash" : "50008ca41657d480425eb6961b91d84889e6ce84",
+              "puppet-version" : "3.5.1",
+              "receive-time" : "2014-05-07T00:16:50.067Z",
+              "report-format" : 4,
+              "start-time" : "2014-05-07T00:16:44.661Z",
+              "end-time" : "2014-05-07T00:16:47.864Z",
+              "transaction-uuid" : "6a45897c-a67f-41df-8d4e-2391ea9c0b76",
+              "configuration-version" : "1399421807",
+              "certname" : "puppetmaster.local"
+            }
+        ],
         '/catalogs/host1': [
             {
                 "metadata": {
