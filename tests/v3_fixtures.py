@@ -134,6 +134,9 @@ def v3():
                 "server-time" : "2014-05-09T03:36:14.958Z"
             }
         ],
+        '/fact-names': [
+            "_timestamp", "architecture", "bios_release_date", "bios_vendor", "bios_version", "blockdevice_sda_model", "blockdevice_sda_size", "blockdevice_sda_vendor", "blockdevice_sr0_model", "blockdevice_sr0_size", "blockdevice_sr0_vendor", "blockdevices", "boardmanufacturer", "boardproductname", "boardserialnumber", "clientcert", "clientnoop", "clientversion", "domain", "facterversion", "filesystems", "fqdn", "hardwareisa", "hardwaremodel", "hostname", "id", "interfaces", "ipaddress", "ipaddress_eth0", "ipaddress_eth1", "ipaddress_lo", "is_pe", "is_virtual", "kernel", "kernelmajversion", "kernelrelease", "kernelversion", "lsbdistcodename", "lsbdistdescription", "lsbdistid", "lsbdistrelease", "lsbmajdistrelease", "macaddress", "macaddress_eth0", "macaddress_eth1", "manufacturer", "memoryfree", "memoryfree_mb", "memorysize", "memorysize_mb", "mtu_eth0", "mtu_eth1", "mtu_lo", "netmask", "netmask_eth0", "netmask_eth1", "netmask_lo", "network_eth0", "network_eth1", "network_lo", "operatingsystem", "operatingsystemmajrelease", "operatingsystemrelease", "osfamily", "path", "physicalprocessorcount", "processor0", "processorcount", "productname", "ps", "puppet_vardir", "puppetversion", "root_home", "rubysitedir", "rubyversion", "selinux", "serialnumber", "sshdsakey", "sshecdsakey", "sshfp_dsa", "sshfp_ecdsa", "sshfp_rsa", "sshrsakey", "swapfree", "swapfree_mb", "swapsize", "swapsize_mb", "timezone", "type", "uniqueid", "uptime", "uptime_days", "uptime_hours", "uptime_seconds", "uuid", "virtual"
+        ],
         '/catalogs/host1': [
             {
                 "metadata": {

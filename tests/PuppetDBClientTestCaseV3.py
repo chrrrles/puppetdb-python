@@ -165,3 +165,13 @@ class PuppetDBClientTestCaseV3(unittest.TestCase):
         st_0 = resp[0]
         self.assertTrue(st_0.has_key('server-time'))
         self.assertEqual(st_0.get('server-time'), '2014-05-09T03:36:14.958Z')
+
+    @patch('puppetdb.utils.api_request')
+    def test_get_fact_names(self, get):
+        get.side_effect = helpers.mock_api_request
+        resp = self._client.get_fact_names()
+        self.assertNotEqual(len(resp), 0)
+        self.assertTrue('_timestamp' in resp)
+        self.assertTrue('architecture' in resp)
+        self.assertTrue('fqdn' in resp)
+        self.assertFalse('BogusName' in resp)
