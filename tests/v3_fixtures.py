@@ -129,6 +129,11 @@ def v3():
                 "version" : "2.0.0",
             }
         ],
+         '/server-time': [
+            {
+                "server-time" : "2014-05-09T03:36:14.958Z"
+            }
+        ],
         '/catalogs/host1': [
             {
                 "metadata": {
