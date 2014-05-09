@@ -156,3 +156,12 @@ class PuppetDBClientTestCaseV3(unittest.TestCase):
         ver_0 = resp[0]
         self.assertTrue(ver_0.has_key('version'))
         self.assertEqual(ver_0.get('version'), '2.0.0')
+
+    @patch('puppetdb.utils.api_request')
+    def test_get_server_time(self, get):
+        get.side_effect = helpers.mock_api_request
+        resp = self._client.get_server_time()
+        self.assertNotEqual(len(resp), 0)
+        st_0 = resp[0]
+        self.assertTrue(st_0.has_key('server-time'))
+        self.assertEqual(st_0.get('server-time'), '2014-05-09T03:36:14.958Z')
