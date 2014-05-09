@@ -186,9 +186,9 @@ class PuppetDBClientTestCaseV3(unittest.TestCase):
         self.assertEqual(mn_0.get('JMImplementation:type=MBeanServerDelegate'), '/metrics/mbean/JMImplementation%3Atype%3DMBeanServerDelegate')
 
     @patch('puppetdb.utils.api_request')
-    def test_get_metric_by_name(self, get):
+    def test_get_metrics_by_name(self, get):
         get.side_effect = helpers.mock_api_request
-        resp = self._client.get_metric_by_name('JMImplementation%3Atype%3DMBeanServerDelegate')
+        resp = self._client.get_metrics_by_name('JMImplementation%3Atype%3DMBeanServerDelegate')
         self.assertNotEqual(len(resp), 0)
         mn_0 = resp[0]
         self.assertTrue(mn_0.has_key('MBeanServerId'))
