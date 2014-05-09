@@ -14,7 +14,7 @@ from puppetdb import utils
 
 API_VERSION = 'v3'
 
-def get_all_metric_names(api_url=None, verify=False, cert=list()):
+def get_metric_names(api_url=None, verify=False, cert=list()):
     """
     Returns all available metric names
 
@@ -23,7 +23,7 @@ def get_all_metric_names(api_url=None, verify=False, cert=list()):
     """
     return utils._make_api_request(api_url, '/metrics/mbeans', verify, cert)
 
-def get_metric(api_url=None, metric_name=None, verify=False, cert=list()):
+def get_metric_by_name(api_url=None, metric_name=None, verify=False, cert=list()):
     """
     Returns info for a Node
 
