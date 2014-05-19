@@ -1,0 +1,1014 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>puppetdb.v3 package &mdash; python-puppetdb 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="python-puppetdb 1.0.0 documentation" href="index.html" />
+    <link rel="up" title="puppetdb package" href="puppetdb.html" />
+    <link rel="next" title="puppetdb.v4 package" href="puppetdb.v4.html" />
+    <link rel="prev" title="puppetdb.v2 package" href="puppetdb.v2.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="puppetdb.v4.html" title="puppetdb.v4 package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="puppetdb.v2.html" title="puppetdb.v2 package"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">python-puppetdb 1.0.0 documentation</a> &raquo;</li>
+          <li><a href="modules.html" >&lt;no title&gt;</a> &raquo;</li>
+          <li><a href="puppetdb.html" accesskey="U">puppetdb package</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="puppetdb-v3-package">
+<h1>puppetdb.v3 package<a class="headerlink" href="#puppetdb-v3-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-puppetdb.v3.aggregate_event_counts">
+<span id="puppetdb-v3-aggregate-event-counts-module"></span><h2>puppetdb.v3.aggregate_event_counts module<a class="headerlink" href="#module-puppetdb.v3.aggregate_event_counts" title="Permalink to this headline">¶</a></h2>
+<p>aggregate_event_counts.py: A bunch of API methods for interacting with v3 aggregate event counts in the PuppetDB API.</p>
+<p>Operators
+See the Operators page for the full list of available operators. Note that inequality operators (&lt;, &gt;, &lt;=, &gt;=) are only supported against the timestamp FIELD.</p>
+<p>Fields
+FIELD may be any of the following. Unless otherwise noted, all fields support both equality and regular expression match operators, but do not support inequality operators.</p>
+<p>certname: the name of the node that the event occurred on.
+report: the id of the report that the event occurred in; these ids can be acquired via event queries or via the /reports query endpoint.
+status: the status of the event; legal values are success, failure, noop, and skipped.
+timestamp: the timestamp (from the puppet agent) at which the event occurred. This field supports the inequality operators. All values should be specified as ISO-8601 compatible date/time strings.
+run-start-time: the timestamp (from the puppet agent) at which the puppet run began. This field supports the inequality operators. All values should be specified as ISO-8601 compatible date/time strings.
+run-end-time: the timestamp (from the puppet agent) at which the puppet run finished. This field supports the inequality operators. All values should be specified as ISO-8601 compatible date/time strings.
+report-receive-time: the timestamp (from the PuppetDB server) at which the puppet report was received. This field supports the inequality operators. All values should be specified as ISO-8601 compatible date/time strings.
+resource-type: the type of resource that the event occurred on; e.g., File, Package, etc.
+resource-title: the title of the resource that the event occurred on
+property: the property/parameter of the resource that the event occurred on; e.g., for a Package resource, this field might have a value of ensure. NOTE: this field may contain NULL values; see notes below.
+new-value: the new value that Puppet was attempting to set for the specified resource property. NOTE: this field may contain NULL values; see notes below.
+old-value: the previous value of the resource property, which Puppet was attempting to change. NOTE: this field may contain NULL values; see notes below.
+message: a description (supplied by the resource provider) of what happened during the event. NOTE: this field may contain NULL values; see notes below.
+file: the manifest file in which the resource definition is located. NOTE: this field may contain NULL values; see notes below.
+line: the line (of the containing manifest file) at which the resource definition can be found. NOTE: this field may contain NULL values; see notes below.
+containing-class: the Puppet class where this resource is declared. NOTE: this field may contain NULL values; see notes below.
+latest-report?: whether the event occurred in the most recent Puppet run (per-node). NOTE: the value of this field is always boolean (true or false without quotes), and it is not supported by the regex match operator.</p>
+<p>Notes on fields that allow NULL values
+In the case of a skipped resource event, some of the fields of an event may not have values. We handle this case in a slightly special way when these fields are used in equality (=) or inequality (!=) queries; specifically, an equality query will always return false for an event with no value for the field, and an inequality query will always return true.</p>
+<p>The response is a single JSON map containing aggregated event-count information and a total for how many event-count results were aggregated.
+{</p>
+<blockquote>
+<div>&#8220;successes&#8221;: 2,
+&#8220;failures&#8221;: 0,
+&#8220;noops&#8221;: 0,
+&#8220;skips&#8221;: 1,
+&#8220;total&#8221;: 3</div></blockquote>
+<p>}</p>
+<dl class="function">
+<dt id="puppetdb.v3.aggregate_event_counts.get_aggregate_event_counts">
+<tt class="descclassname">puppetdb.v3.aggregate_event_counts.</tt><tt class="descname">get_aggregate_event_counts</tt><big>(</big><em>api_url=None</em>, <em>query=''</em>, <em>summarize_by=''</em>, <em>count_by=''</em>, <em>counts_filter=''</em>, <em>distinct_resources=''</em>, <em>verify=False</em>, <em>cert=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#puppetdb.v3.aggregate_event_counts.get_aggregate_event_counts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns facts</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>api_url</strong> &#8211; Base PuppetDB API url</li>
+<li><strong>query</strong> &#8211; Required. A JSON array of query predicates in prefix form ([&#8220;&lt;OPERATOR&gt;&#8221;, &#8220;&lt;FIELD&gt;&#8221;, &#8220;&lt;VALUE&gt;&#8221;]). This query is forwarded to the events endpoint - see there for additional documentation.</li>
+<li><strong>summarize_by</strong> &#8211; Required. A string specifying which type of object you’d like to see counts for. Supported values are resource, containing-class, and certname.</li>
+<li><strong>count_by</strong> &#8211; Optional. A string specifying what type of object is counted when building up the counts of successes, failures, noops, and skips. Supported values are resource (default) and certname.</li>
+<li><strong>counts_filter</strong> &#8211; Optional. A JSON array of query predicates in the usual prefix form. This query is applied to the final event counts output. Supported operators are =, &gt;, &lt;, &gt;=, and &lt;=. Supported fields are failures, successes, noops, and skips.</li>
+<li><strong>distinct_resources</strong> &#8211; Optional. (EXPERIMENTAL: it is possible that the behavior of this parameter may change in future releases.) This parameter is passed along to the event query - see there for additional documentation.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Response Format</p>
+<dl class="docutils">
+<dt>{</dt>
+<dd>&#8220;successes&#8221;: 2,
+&#8220;failures&#8221;: 0,
+&#8220;noops&#8221;: 0,
+&#8220;skips&#8221;: 1,
+&#8220;total&#8221;: 3</dd>
+</dl>
+<p>}</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-puppetdb.v3.catalogs">
+<span id="puppetdb-v3-catalogs-module"></span><h2>puppetdb.v3.catalogs module<a class="headerlink" href="#module-puppetdb.v3.catalogs" title="Permalink to this headline">¶</a></h2>
+<p>resources.py: A bunch of API methods for interacting with v3 catalogs in the PuppetDB API.</p>
+<dl class="function">
+<dt id="puppetdb.v3.catalogs.get_catalog">
+<tt class="descclassname">puppetdb.v3.catalogs.</tt><tt class="descname">get_catalog</tt><big>(</big><em>api_url=None</em>, <em>node_name=None</em>, <em>verify=False</em>, <em>cert=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#puppetdb.v3.catalogs.get_catalog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns catalogs by node</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>api_url</strong> &#8211; Base PuppetDB API url</li>
+<li><strong>node_name</strong> &#8211; Name of node</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-puppetdb.v3.event_counts">
+<span id="puppetdb-v3-event-counts-module"></span><h2>puppetdb.v3.event_counts module<a class="headerlink" href="#module-puppetdb.v3.event_counts" title="Permalink to this headline">¶</a></h2>
+<p>event_counts.py: A bunch of API methods for interacting with v3 event counts in the PuppetDB API.</p>
+<p>Operators
+See the Operators page for the full list of available operators. Note that inequality operators (&lt;, &gt;, &lt;=, &gt;=) are only supported against the timestamp FIELD.</p>
+<p>Fields
+FIELD may be any of the following. Unless otherwise noted, all fields support both equality and regular expression match operators, but do not support inequality operators.</p>
+<p>certname: the name of the node that the event occurred on.
+report: the id of the report that the event occurred in; these ids can be acquired via event queries or via the /reports query endpoint.
+status: the status of the event; legal values are success, failure, noop, and skipped.
+timestamp: the timestamp (from the puppet agent) at which the event occurred. This field supports the inequality operators. All values should be specified as ISO-8601 compatible date/time strings.
+run-start-time: the timestamp (from the puppet agent) at which the puppet run began. This field supports the inequality operators. All values should be specified as ISO-8601 compatible date/time strings.
+run-end-time: the timestamp (from the puppet agent) at which the puppet run finished. This field supports the inequality operators. All values should be specified as ISO-8601 compatible date/time strings.
+report-receive-time: the timestamp (from the PuppetDB server) at which the puppet report was received. This field supports the inequality operators. All values should be specified as ISO-8601 compatible date/time strings.
+resource-type: the type of resource that the event occurred on; e.g., File, Package, etc.
+resource-title: the title of the resource that the event occurred on
+property: the property/parameter of the resource that the event occurred on; e.g., for a Package resource, this field might have a value of ensure. NOTE: this field may contain NULL values; see notes below.
+new-value: the new value that Puppet was attempting to set for the specified resource property. NOTE: this field may contain NULL values; see notes below.
+old-value: the previous value of the resource property, which Puppet was attempting to change. NOTE: this field may contain NULL values; see notes below.
+message: a description (supplied by the resource provider) of what happened during the event. NOTE: this field may contain NULL values; see notes below.
+file: the manifest file in which the resource definition is located. NOTE: this field may contain NULL values; see notes below.
+line: the line (of the containing manifest file) at which the resource definition can be found. NOTE: this field may contain NULL values; see notes below.
+containing-class: the Puppet class where this resource is declared. NOTE: this field may contain NULL values; see notes below.
+latest-report?: whether the event occurred in the most recent Puppet run (per-node). NOTE: the value of this field is always boolean (true or false without quotes), and it is not supported by the regex match operator.</p>
+<p>Notes on fields that allow NULL values
+In the case of a skipped resource event, some of the fields of an event may not have values. We handle this case in a slightly special way when these fields are used in equality (=) or inequality (!=) queries; specifically, an equality query will always return false for an event with no value for the field, and an inequality query will always return true.</p>
+<p>The response is a JSON array of maps. Each map contains the counts of events that matched the input parameters. The events are counted based on their statuses: failures, successes, noops, skips.</p>
+<p>The maps also contain additional data about which object the events occurred on. The subject-type is the value that was used to summarize by (and therefore should match the input value to summarize-by). The subject map contains specific data about the object the event occurred on, and will vary based on the value specified for summarize-by.</p>
+<p>When summarizing by certname, the subject will contain a title key:
+[</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>{</dt>
+<dd>&#8220;subject-type&#8221;: &#8220;certname&#8221;,
+&#8220;subject&#8221;: { &#8220;title&#8221;: &#8220;foo.local&#8221; },
+&#8220;failures&#8221;: 0,
+&#8220;successes&#8221;: 2,
+&#8220;noops&#8221;: 0,
+&#8220;skips&#8221;: 1</dd>
+</dl>
+<p>},
+{</p>
+<blockquote>
+<div>&#8220;subject-type&#8221;: &#8220;certname&#8221;,
+&#8220;subject&#8221;: { &#8220;title&#8221;: &#8220;bar.local&#8221; },
+&#8220;failures&#8221;: 1,
+&#8220;successes&#8221;: 0,
+&#8220;noops&#8221;: 0,
+&#8220;skips&#8221;: 1</div></blockquote>
+<p>}</p>
+</div></blockquote>
+<p>]</p>
+<p>When summarizing by resource, the subject will contain a type and title key:
+[</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>{</dt>
+<dd>&#8220;subject-type&#8221;: &#8220;resource&#8221;,
+&#8220;subject&#8221;: { &#8220;type&#8221;: &#8220;Notify&#8221;, &#8220;title&#8221;: &#8220;Foo happened&#8221; },
+&#8220;failures&#8221;: 0,
+&#8220;successes&#8221;: 1,
+&#8220;noops&#8221;: 0,
+&#8220;skips&#8221;: 0</dd>
+</dl>
+<p>},
+{</p>
+<blockquote>
+<div>&#8220;subject-type&#8221;: &#8220;resource&#8221;,
+&#8220;subject&#8221;: { &#8220;type&#8221;: &#8220;Notify&#8221;, &#8220;title&#8221;: &#8220;Bar happened&#8221; },
+&#8220;failures&#8221;: 0,
+&#8220;successes&#8221;: 0,
+&#8220;noops&#8221;: 0,
+&#8220;skips&#8221;: 1</div></blockquote>
+<p>}</p>
+</div></blockquote>
+<p>]</p>
+<p>When summarizing by containing-class, the subject will contain a title key:
+[</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>{</dt>
+<dd>&#8220;subject-type&#8221;: &#8220;containing-class&#8221;,
+&#8220;subject&#8221;: { &#8220;title&#8221;: &#8220;Foo::Class&#8221; },
+&#8220;failures&#8221;: 1,
+&#8220;successes&#8221;: 2,
+&#8220;noops&#8221;: 0,
+&#8220;skips&#8221;: 1</dd>
+</dl>
+<p>},
+{</p>
+<blockquote>
+<div>&#8220;subject-type&#8221;: &#8220;containing-class&#8221;,
+&#8220;subject&#8221;: { &#8220;title&#8221;: null },
+&#8220;failures&#8221;: 0,
+&#8220;successes&#8221;: 0,
+&#8220;noops&#8221;: 2,
+&#8220;skips&#8221;: 0</div></blockquote>
+<p>}</p>
+</div></blockquote>
+<p>]</p>
+<dl class="function">
+<dt id="puppetdb.v3.event_counts.get_event_counts">
+<tt class="descclassname">puppetdb.v3.event_counts.</tt><tt class="descname">get_event_counts</tt><big>(</big><em>api_url=None</em>, <em>query=''</em>, <em>summarize_by=''</em>, <em>count_by=''</em>, <em>counts_filter=''</em>, <em>distinct_resources=''</em>, <em>verify=False</em>, <em>cert=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#puppetdb.v3.event_counts.get_event_counts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns facts</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>api_url</strong> &#8211; Base PuppetDB API url</li>
+<li><strong>query</strong> &#8211; Required. A JSON array of query predicates in prefix form ([&#8220;&lt;OPERATOR&gt;&#8221;, &#8220;&lt;FIELD&gt;&#8221;, &#8220;&lt;VALUE&gt;&#8221;]). This query is forwarded to the events endpoint - see there for additional documentation.</li>
+<li><strong>summarize_by</strong> &#8211; Required. A string specifying which type of object you’d like to see counts for. Supported values are resource, containing-class, and certname.</li>
+<li><strong>count_by</strong> &#8211; Optional. A string specifying what type of object is counted when building up the counts of successes, failures, noops, and skips. Supported values are resource (default) and certname.</li>
+<li><strong>counts_filter</strong> &#8211; Optional. A JSON array of query predicates in the usual prefix form. This query is applied to the final event counts output. Supported operators are =, &gt;, &lt;, &gt;=, and &lt;=. Supported fields are failures, successes, noops, and skips.</li>
+<li><strong>distinct_resources</strong> &#8211; Optional. (EXPERIMENTAL: it is possible that the behavior of this parameter may change in future releases.) This parameter is passed along to the event query - see there for additional documentation.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Response
+When summarizing by certname, the subject will contain a title key:
+[</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>{</dt>
+<dd>&#8220;subject-type&#8221;: &#8220;certname&#8221;,
+&#8220;subject&#8221;: { &#8220;title&#8221;: &#8220;foo.local&#8221; },
+&#8220;failures&#8221;: 0,
+&#8220;successes&#8221;: 2,
+&#8220;noops&#8221;: 0,
+&#8220;skips&#8221;: 1</dd>
+</dl>
+<p>},
+{</p>
+<blockquote>
+<div>&#8220;subject-type&#8221;: &#8220;certname&#8221;,
+&#8220;subject&#8221;: { &#8220;title&#8221;: &#8220;bar.local&#8221; },
+&#8220;failures&#8221;: 1,
+&#8220;successes&#8221;: 0,
+&#8220;noops&#8221;: 0,
+&#8220;skips&#8221;: 1</div></blockquote>
+<p>}</p>
+</div></blockquote>
+<p>]
+When summarizing by resource, the subject will contain a type and title key:
+[</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>{</dt>
+<dd>&#8220;subject-type&#8221;: &#8220;resource&#8221;,
+&#8220;subject&#8221;: { &#8220;type&#8221;: &#8220;Notify&#8221;, &#8220;title&#8221;: &#8220;Foo happened&#8221; },
+&#8220;failures&#8221;: 0,
+&#8220;successes&#8221;: 1,
+&#8220;noops&#8221;: 0,
+&#8220;skips&#8221;: 0</dd>
+</dl>
+<p>},
+{</p>
+<blockquote>
+<div>&#8220;subject-type&#8221;: &#8220;resource&#8221;,
+&#8220;subject&#8221;: { &#8220;type&#8221;: &#8220;Notify&#8221;, &#8220;title&#8221;: &#8220;Bar happened&#8221; },
+&#8220;failures&#8221;: 0,
+&#8220;successes&#8221;: 0,
+&#8220;noops&#8221;: 0,
+&#8220;skips&#8221;: 1</div></blockquote>
+<p>}</p>
+</div></blockquote>
+<p>]
+When summarizing by containing-class, the subject will contain a title key:
+[</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>{</dt>
+<dd>&#8220;subject-type&#8221;: &#8220;containing-class&#8221;,
+&#8220;subject&#8221;: { &#8220;title&#8221;: &#8220;Foo::Class&#8221; },
+&#8220;failures&#8221;: 1,
+&#8220;successes&#8221;: 2,
+&#8220;noops&#8221;: 0,
+&#8220;skips&#8221;: 1</dd>
+</dl>
+<p>},
+{</p>
+<blockquote>
+<div>&#8220;subject-type&#8221;: &#8220;containing-class&#8221;,
+&#8220;subject&#8221;: { &#8220;title&#8221;: null },
+&#8220;failures&#8221;: 0,
+&#8220;successes&#8221;: 0,
+&#8220;noops&#8221;: 2,
+&#8220;skips&#8221;: 0</div></blockquote>
+<p>}</p>
+</div></blockquote>
+<p>]</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-puppetdb.v3.events">
+<span id="puppetdb-v3-events-module"></span><h2>puppetdb.v3.events module<a class="headerlink" href="#module-puppetdb.v3.events" title="Permalink to this headline">¶</a></h2>
+<p>events.py: A bunch of API methods for interacting with v3 events in the PuppetDB API.</p>
+<p>Operators
+See the Operators page for the full list of available operators. Note that inequality operators (&lt;, &gt;, &lt;=, &gt;=) are only supported against the timestamp FIELD.</p>
+<p>Fields
+FIELD may be any of the following. Unless otherwise noted, all fields support both equality and regular expression match operators, but do not support inequality operators.</p>
+<p>certname: the name of the node that the event occurred on.
+report: the id of the report that the event occurred in; these ids can be acquired via event queries or via the /reports query endpoint.
+status: the status of the event; legal values are success, failure, noop, and skipped.
+timestamp: the timestamp (from the puppet agent) at which the event occurred. This field supports the inequality operators. All values should be specified as ISO-8601 compatible date/time strings.
+run-start-time: the timestamp (from the puppet agent) at which the puppet run began. This field supports the inequality operators. All values should be specified as ISO-8601 compatible date/time strings.
+run-end-time: the timestamp (from the puppet agent) at which the puppet run finished. This field supports the inequality operators. All values should be specified as ISO-8601 compatible date/time strings.
+report-receive-time: the timestamp (from the PuppetDB server) at which the puppet report was received. This field supports the inequality operators. All values should be specified as ISO-8601 compatible date/time strings.
+resource-type: the type of resource that the event occurred on; e.g., File, Package, etc.
+resource-title: the title of the resource that the event occurred on
+property: the property/parameter of the resource that the event occurred on; e.g., for a Package resource, this field might have a value of ensure. NOTE: this field may contain NULL values; see notes below.
+new-value: the new value that Puppet was attempting to set for the specified resource property. NOTE: this field may contain NULL values; see notes below.
+old-value: the previous value of the resource property, which Puppet was attempting to change. NOTE: this field may contain NULL values; see notes below.
+message: a description (supplied by the resource provider) of what happened during the event. NOTE: this field may contain NULL values; see notes below.
+file: the manifest file in which the resource definition is located. NOTE: this field may contain NULL values; see notes below.
+line: the line (of the containing manifest file) at which the resource definition can be found. NOTE: this field may contain NULL values; see notes below.
+containing-class: the Puppet class where this resource is declared. NOTE: this field may contain NULL values; see notes below.
+latest-report?: whether the event occurred in the most recent Puppet run (per-node). NOTE: the value of this field is always boolean (true or false without quotes), and it is not supported by the regex match operator.</p>
+<p>Notes on fields that allow NULL values
+In the case of a skipped resource event, some of the fields of an event may not have values. We handle this case in a slightly special way when these fields are used in equality (=) or inequality (!=) queries; specifically, an equality query will always return false for an event with no value for the field, and an inequality query will always return true.</p>
+<p>The response is a JSON array of events that matched the input parameters. The events are sorted by their timestamps, in descending order:</p>
+<dl class="docutils">
+<dt>[</dt>
+<dd><dl class="first docutils">
+<dt>{</dt>
+<dd>&#8220;certname&#8221;: &#8220;foo.localdomain&#8221;,
+&#8220;old-value&#8221;: &#8220;absent&#8221;,
+&#8220;property&#8221;: &#8220;ensure&#8221;,
+&#8220;timestamp&#8221;: &#8220;2012-10-30T19:01:05.000Z&#8221;,
+&#8220;resource-type&#8221;: &#8220;File&#8221;,
+&#8220;resource-title&#8221;: &#8220;/tmp/reportingfoo&#8221;,
+&#8220;new-value&#8221;: &#8220;file&#8221;,
+&#8220;message&#8221;: &#8220;defined content as &#8216;{md5}49f68a5c8493ec2c0bf489821c21fc3b&#8217;&#8221;,
+&#8220;report&#8221;: &#8220;38ff2aef3ffb7800fe85b322280ade2b867c8d27&#8221;,
+&#8220;status&#8221;: &#8220;success&#8221;,
+&#8220;file&#8221;: &#8220;/home/user/path/to/manifest.pp&#8221;,
+&#8220;line&#8221;: 6,
+&#8220;containment-path&#8221;: [ &#8220;Stage[main]&#8221;, &#8220;Foo&#8221;, &#8220;File[/tmp/reportingfoo]&#8221; ],
+&#8220;containing-class&#8221;: &#8220;Foo&#8221;,
+&#8220;run-start-time&#8221;: &#8220;2012-10-30T19:00:00.000Z&#8221;,
+&#8220;run-end-time&#8221;: &#8220;2012-10-30T19:05:00.000Z&#8221;,
+&#8220;report-receive-time&#8221;: &#8220;2012-10-30T19:06:00.000Z&#8221;</dd>
+</dl>
+<p>},
+{</p>
+<blockquote>
+<div>&#8220;certname&#8221;: &#8220;foo.localdomain&#8221;,
+&#8220;old-value&#8221;: &#8220;absent&#8221;,
+&#8220;property&#8221;: &#8220;message&#8221;,
+&#8220;timestamp&#8221;: &#8220;2012-10-30T19:01:05.000Z&#8221;,
+&#8220;resource-type&#8221;: &#8220;Notify&#8221;,
+&#8220;resource-title&#8221;: &#8220;notify, yo&#8221;,
+&#8220;new-value&#8221;: &#8220;notify, yo&#8221;,
+&#8220;message&#8221;: &#8220;defined &#8216;message&#8217; as &#8216;notify, yo&#8217;&#8221;,
+&#8220;report&#8221;: &#8220;38ff2aef3ffb7800fe85b322280ade2b867c8d27&#8221;,
+&#8220;status&#8221;: &#8220;success&#8221;,
+&#8220;file&#8221;: &#8220;/home/user/path/to/manifest.pp&#8221;,
+&#8220;line&#8221;: 10,
+&#8220;containment-path&#8221;: [ &#8220;Stage[main]&#8221;, &#8220;&#8221;, &#8220;Node[default]&#8221;, &#8220;Notify[notify, yo]&#8221; ],
+&#8220;containing-class&#8221;: null,
+&#8220;run-start-time&#8221;: &#8220;2012-10-30T19:00:00.000Z&#8221;,
+&#8220;run-end-time&#8221;: &#8220;2012-10-30T19:05:00.000Z&#8221;,
+&#8220;report-receive-time&#8221;: &#8220;2012-10-30T19:06:00.000Z&#8221;</div></blockquote>
+<p class="last">}</p>
+</dd>
+</dl>
+<p>]</p>
+<dl class="function">
+<dt id="puppetdb.v3.events.get_events">
+<tt class="descclassname">puppetdb.v3.events.</tt><tt class="descname">get_events</tt><big>(</big><em>api_url=None</em>, <em>query=''</em>, <em>verify=False</em>, <em>cert=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#puppetdb.v3.events.get_events" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns events</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>api_url</strong> &#8211; Base PuppetDB API url</li>
+<li><strong>query</strong> &#8211; <p>Required. A JSON array of query predicates, in prefix form (the standard [&#8220;&lt;OPERATOR&gt;&#8221;, &#8220;&lt;FIELD&gt;&#8221;, &#8220;&lt;VALUE&gt;&#8221;] format), conforming to the format described below.
+The query parameter is described by the following grammar:</p>
+<p>query: [ {bool} {query}+ ] | [ &#8220;not&#8221; {query} ] | [ {match} {field} {value} ] | [ {inequality} {field} {value} ]
+field:          FIELD (conforming to [Fields](#fields) specification below)
+value:          string
+bool:           &#8220;or&#8221; | &#8220;and&#8221;
+match:          &#8220;=&#8221; | &#8220;~&#8221;
+inequality:     &#8220;&gt;&#8221; | &#8220;&gt;=&#8221; | &#8220;&lt;&#8221; | &#8220;&lt;=&#8221;
+For example, for all events in the report with hash ‘38ff2aef3ffb7800fe85b322280ade2b867c8d27’, the JSON query structure would be:</p>
+<p>[&#8220;=&#8221;, &#8220;report&#8221;, &#8220;38ff2aef3ffb7800fe85b322280ade2b867c8d27&#8221;]
+To retrieve all of the events within a given time period:</p>
+<dl class="docutils">
+<dt>[&#8220;and&#8221;, [&#8220;&lt;&#8221;, &#8220;timestamp&#8221;, &#8220;2011-01-01T12:01:00-03:00&#8221;],</dt>
+<dd>[&#8220;&gt;&#8221;, &#8220;timestamp&#8221;, &#8220;2011-01-01T12:00:00-03:00&#8221;]]</dd>
+</dl>
+<p>To retrieve all of the ‘failure’ events for nodes named ‘foo.*’ and resources of type ‘Service’:</p>
+<dl class="docutils">
+<dt>[&#8220;and&#8221;, [&#8220;=&#8221;, &#8220;status&#8221;, &#8220;failure&#8221;],</dt>
+<dd>[&#8220;~&#8221;, &#8220;certname&#8221;, &#8220;^foo.&#8221;],
+[&#8220;=&#8221;, &#8220;resource-type&#8221;, &#8220;Service&#8221;]]</dd>
+</dl>
+<p>To retrieve latest events that are tied to the class found in your update.pp file</p>
+<dl class="docutils">
+<dt>[&#8220;and&#8221;, [&#8220;=&#8221;, &#8220;latest-report?&#8221;, true],</dt>
+<dd>[&#8220;~&#8221;, &#8220;file&#8221;, &#8220;update.pp&#8221;]]</dd>
+</dl>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-puppetdb.v3.fact_names">
+<span id="puppetdb-v3-fact-names-module"></span><h2>puppetdb.v3.fact_names module<a class="headerlink" href="#module-puppetdb.v3.fact_names" title="Permalink to this headline">¶</a></h2>
+<p>fact_names.py: A bunch of API methods for interacting with v3 fact_names in the PuppetDB API.</p>
+<dl class="function">
+<dt id="puppetdb.v3.fact_names.get_fact_names">
+<tt class="descclassname">puppetdb.v3.fact_names.</tt><tt class="descname">get_fact_names</tt><big>(</big><em>api_url=None</em>, <em>verify=False</em>, <em>cert=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#puppetdb.v3.fact_names.get_fact_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns fact names</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>api_url</strong> &#8211; Base PuppetDB API url</td>
+</tr>
+</tbody>
+</table>
+<p>Response
+[&lt;fact&gt;, &lt;fact&gt;, ..., &lt;fact&gt;, &lt;fact&gt;]</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-puppetdb.v3.facts">
+<span id="puppetdb-v3-facts-module"></span><h2>puppetdb.v3.facts module<a class="headerlink" href="#module-puppetdb.v3.facts" title="Permalink to this headline">¶</a></h2>
+<p>facts.py: A bunch of API methods for interacting with v3 facts in the PuppetDB API.</p>
+<p>Successful responses will be in application/json. Errors will be returned as non-JSON strings.</p>
+<p>The result will be a JSON array, with one entry per fact. Each entry is of the form:</p>
+<p>Generic Response Type
+{</p>
+<blockquote>
+<div>&#8220;certname&#8221;: &lt;node name&gt;,
+&#8220;name&#8221;: &lt;fact name&gt;,
+&#8220;value&#8221;: &lt;fact value&gt;</div></blockquote>
+<p>}</p>
+<dl class="function">
+<dt id="puppetdb.v3.facts.get_facts">
+<tt class="descclassname">puppetdb.v3.facts.</tt><tt class="descname">get_facts</tt><big>(</big><em>api_url=None</em>, <em>query=''</em>, <em>verify=False</em>, <em>cert=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#puppetdb.v3.facts.get_facts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns facts</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>api_url</strong> &#8211; Base PuppetDB API url</li>
+<li><strong>query</strong> &#8211; Optional. A JSON array containing the query in prefix notation. If not provided, all results will be returned.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Response
+[{&#8220;certname&#8221;: &#8220;a.example.com&#8221;, &#8220;name&#8221;: &#8220;operatingsystem&#8221;, &#8220;value&#8221;: &#8220;Debian&#8221;},
+{&#8220;certname&#8221;: &#8220;b.example.com&#8221;, &#8220;name&#8221;: &#8220;operatingsystem&#8221;, &#8220;value&#8221;: &#8220;RedHat&#8221;},
+{&#8220;certname&#8221;: &#8220;c.example.com&#8221;, &#8220;name&#8221;: &#8220;operatingsystem&#8221;, &#8220;value&#8221;: &#8220;Darwin&#8221;}]</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="puppetdb.v3.facts.get_facts_by_name">
+<tt class="descclassname">puppetdb.v3.facts.</tt><tt class="descname">get_facts_by_name</tt><big>(</big><em>api_url=None</em>, <em>fact_name=None</em>, <em>verify=False</em>, <em>cert=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#puppetdb.v3.facts.get_facts_by_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns facts by name</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>api_url</strong> &#8211; Base PuppetDB API url</li>
+<li><strong>fact_name</strong> &#8211; Name of fact</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Response
+[{&#8220;certname&#8221;: &#8220;a.example.com&#8221;, &#8220;name&#8221;: &#8220;operatingsystem&#8221;, &#8220;value&#8221;: &#8220;Debian&#8221;},
+{&#8220;certname&#8221;: &#8220;b.example.com&#8221;, &#8220;name&#8221;: &#8220;operatingsystem&#8221;, &#8220;value&#8221;: &#8220;Redhat&#8221;},
+{&#8220;certname&#8221;: &#8220;c.example.com&#8221;, &#8220;name&#8221;: &#8220;operatingsystem&#8221;, &#8220;value&#8221;: &#8220;Ubuntu&#8221;}]</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="puppetdb.v3.facts.get_facts_by_name_and_value">
+<tt class="descclassname">puppetdb.v3.facts.</tt><tt class="descname">get_facts_by_name_and_value</tt><big>(</big><em>api_url=None</em>, <em>fact_name=None</em>, <em>fact_value=None</em>, <em>verify=False</em>, <em>cert=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#puppetdb.v3.facts.get_facts_by_name_and_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns facts by name and value</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>api_url</strong> &#8211; Base PuppetDB API url</li>
+<li><strong>fact_name</strong> &#8211; Name of fact</li>
+<li><strong>fact_value</strong> &#8211; Value of fact</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Response
+[{&#8220;certname&#8221;: &#8220;a.example.com&#8221;, &#8220;name&#8221;: &#8220;operatingsystem&#8221;, &#8220;value&#8221;: &#8220;Debian&#8221;},
+{&#8220;certname&#8221;: &#8220;b.example.com&#8221;, &#8220;name&#8221;: &#8220;operatingsystem&#8221;, &#8220;value&#8221;: &#8220;Debian}]</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-puppetdb.v3.metrics">
+<span id="puppetdb-v3-metrics-module"></span><h2>puppetdb.v3.metrics module<a class="headerlink" href="#module-puppetdb.v3.metrics" title="Permalink to this headline">¶</a></h2>
+<p>metrics.py: A bunch of API methods for interacting with v3 metrics in the PuppetDB API.</p>
+<dl class="function">
+<dt id="puppetdb.v3.metrics.get_all_metric_names">
+<tt class="descclassname">puppetdb.v3.metrics.</tt><tt class="descname">get_all_metric_names</tt><big>(</big><em>api_url=None</em>, <em>verify=False</em>, <em>cert=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#puppetdb.v3.metrics.get_all_metric_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all available metric names</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>api_url</strong> &#8211; Base PuppetDB API url</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="puppetdb.v3.metrics.get_metric">
+<tt class="descclassname">puppetdb.v3.metrics.</tt><tt class="descname">get_metric</tt><big>(</big><em>api_url=None</em>, <em>metric_name=None</em>, <em>verify=False</em>, <em>cert=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#puppetdb.v3.metrics.get_metric" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns info for a Node</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>api_url</strong> &#8211; Base PuppetDB API url</li>
+<li><strong>metric_name</strong> &#8211; Name of metric</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-puppetdb.v3.nodes">
+<span id="puppetdb-v3-nodes-module"></span><h2>puppetdb.v3.nodes module<a class="headerlink" href="#module-puppetdb.v3.nodes" title="Permalink to this headline">¶</a></h2>
+<p>nodes.py: A bunch of API methods for interacting with v3 nodes in the PuppetDB API.</p>
+<dl class="function">
+<dt id="puppetdb.v3.nodes.get_facts">
+<tt class="descclassname">puppetdb.v3.nodes.</tt><tt class="descname">get_facts</tt><big>(</big><em>api_url=None</em>, <em>query={}</em>, <em>verify=False</em>, <em>cert=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#puppetdb.v3.nodes.get_facts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns info for all Nodes</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>api_url</strong> &#8211; Base PuppetDB API url</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="puppetdb.v3.nodes.get_node">
+<tt class="descclassname">puppetdb.v3.nodes.</tt><tt class="descname">get_node</tt><big>(</big><em>api_url=None</em>, <em>node_name=None</em>, <em>verify=False</em>, <em>cert=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#puppetdb.v3.nodes.get_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns info for a Node</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>api_url</strong> &#8211; Base PuppetDB API url</li>
+<li><strong>node_name</strong> &#8211; Name of node</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="puppetdb.v3.nodes.get_node_fact_by_name">
+<tt class="descclassname">puppetdb.v3.nodes.</tt><tt class="descname">get_node_fact_by_name</tt><big>(</big><em>api_url=None</em>, <em>node_name=None</em>, <em>fact_name=None</em>, <em>verify=False</em>, <em>cert=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#puppetdb.v3.nodes.get_node_fact_by_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns specified fact for a Node</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>api_url</strong> &#8211; Base PuppetDB API url</li>
+<li><strong>node_name</strong> &#8211; Name of node</li>
+<li><strong>fact_name</strong> &#8211; Name of fact</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="puppetdb.v3.nodes.get_node_facts">
+<tt class="descclassname">puppetdb.v3.nodes.</tt><tt class="descname">get_node_facts</tt><big>(</big><em>api_url=None</em>, <em>node_name=None</em>, <em>verify=False</em>, <em>cert=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#puppetdb.v3.nodes.get_node_facts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns facts for a Node</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>api_url</strong> &#8211; Base PuppetDB API url</li>
+<li><strong>node_name</strong> &#8211; Name of node</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="puppetdb.v3.nodes.get_node_resource_by_type">
+<tt class="descclassname">puppetdb.v3.nodes.</tt><tt class="descname">get_node_resource_by_type</tt><big>(</big><em>api_url=None</em>, <em>node_name=None</em>, <em>type_name=None</em>, <em>verify=False</em>, <em>cert=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#puppetdb.v3.nodes.get_node_resource_by_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns specified resource for a Node</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>api_url</strong> &#8211; Base PuppetDB API url</li>
+<li><strong>node_name</strong> &#8211; Name of node</li>
+<li><strong>type_name</strong> &#8211; Type of resource</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="puppetdb.v3.nodes.get_node_resources">
+<tt class="descclassname">puppetdb.v3.nodes.</tt><tt class="descname">get_node_resources</tt><big>(</big><em>api_url=None</em>, <em>node_name=None</em>, <em>verify=False</em>, <em>cert=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#puppetdb.v3.nodes.get_node_resources" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns resources for a Node</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>api_url</strong> &#8211; Base PuppetDB API url</li>
+<li><strong>node_name</strong> &#8211; Name of node</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="puppetdb.v3.nodes.get_nodes">
+<tt class="descclassname">puppetdb.v3.nodes.</tt><tt class="descname">get_nodes</tt><big>(</big><em>api_url=None</em>, <em>verify=False</em>, <em>cert=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#puppetdb.v3.nodes.get_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns info for all Nodes</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>api_url</strong> &#8211; Base PuppetDB API url</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-puppetdb.v3.reports">
+<span id="puppetdb-v3-reports-module"></span><h2>puppetdb.v3.reports module<a class="headerlink" href="#module-puppetdb.v3.reports" title="Permalink to this headline">¶</a></h2>
+<p>reports.py: A bunch of API methods for interacting with v3 reports in the PuppetDB API.</p>
+<p>Operators
+The only available OPERATOR is =.</p>
+<p>Fields
+FIELD may be any of the following. All fields support only the equality operator.</p>
+<p>certname
+the name of the node that the report was received from.
+hash
+the id of the report; these ids can be acquired via event queries (see the /events query endpoint).</p>
+<p>The response is a JSON array of report summaries for all reports that matched the input parameters.
+The summaries are sorted by the completion time of the report, in descending order:
+[</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>{</dt>
+<dd>&#8220;end-time&#8221;: &#8220;2012-10-29T18:38:01.000Z&#8221;,
+&#8220;puppet-version&#8221;: &#8220;3.0.1&#8221;,
+&#8220;receive-time&#8221;: &#8220;2012-10-29T18:38:04.238Z&#8221;,
+&#8220;configuration-version&#8221;: &#8220;1351535883&#8221;,
+&#8220;start-time&#8221;: &#8220;2012-10-29T18:38:00.000Z&#8221;,
+&#8220;hash&#8221;: &#8220;bd899b1ee825ec1d2c671fe5541b5c8f4a783472&#8221;,
+&#8220;certname&#8221;: &#8220;foo.local&#8221;,
+&#8220;report-format&#8221;: 4,
+&#8220;transaction-uuid&#8221;: &#8220;030c1717-f175-4644-b048-ac9ea328f221&#8221;
+},</dd>
+</dl>
+<dl class="docutils">
+<dt>{</dt>
+<dd>&#8220;end-time&#8221;: &#8220;2012-10-26T22:39:32.000Z&#8221;,
+&#8220;puppet-version&#8221;: &#8220;3.0.1&#8221;,
+&#8220;receive-time&#8221;: &#8220;2012-10-26T22:39:35.305Z&#8221;,
+&#8220;configuration-version&#8221;: &#8220;1351291174&#8221;,
+&#8220;start-time&#8221;: &#8220;2012-10-26T22:39:31.000Z&#8221;,
+&#8220;hash&#8221;: &#8220;cd4e5fd8846bac26d15d151664a40e0f2fa600b0&#8221;,
+&#8220;certname&#8221;: &#8220;foo.local&#8221;,
+&#8220;report-format&#8221;: 4,
+&#8220;transaction-uuid&#8221;: null
+}</dd>
+</dl>
+</div></blockquote>
+<p>]</p>
+<dl class="function">
+<dt id="puppetdb.v3.reports.get_reports">
+<tt class="descclassname">puppetdb.v3.reports.</tt><tt class="descname">get_reports</tt><big>(</big><em>api_url=None</em>, <em>query=''</em>, <em>verify=False</em>, <em>cert=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#puppetdb.v3.reports.get_reports" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns reports</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>api_url</strong> &#8211; Base PuppetDB API url</li>
+<li><strong>query</strong> &#8211; Required. A JSON array of query predicates, in prefix form. (The standard [&#8220;&lt;OPERATOR&gt;&#8221;, &#8220;&lt;FIELD&gt;&#8221;, &#8220;&lt;VALUE&gt;&#8221;] format.)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>Response</dt>
+<dd><dl class="first last docutils">
+<dt>[</dt>
+<dd><dl class="first docutils">
+<dt>{</dt>
+<dd>&#8220;end-time&#8221;: &#8220;2012-10-29T18:38:01.000Z&#8221;,
+&#8220;puppet-version&#8221;: &#8220;3.0.1&#8221;,
+&#8220;receive-time&#8221;: &#8220;2012-10-29T18:38:04.238Z&#8221;,
+&#8220;configuration-version&#8221;: &#8220;1351535883&#8221;,
+&#8220;start-time&#8221;: &#8220;2012-10-29T18:38:00.000Z&#8221;,
+&#8220;hash&#8221;: &#8220;bd899b1ee825ec1d2c671fe5541b5c8f4a783472&#8221;,
+&#8220;certname&#8221;: &#8220;foo.local&#8221;,
+&#8220;report-format&#8221;: 4,
+&#8220;transaction-uuid&#8221;: &#8220;030c1717-f175-4644-b048-ac9ea328f221&#8221;
+},</dd>
+</dl>
+<dl class="last docutils">
+<dt>{</dt>
+<dd>&#8220;end-time&#8221;: &#8220;2012-10-26T22:39:32.000Z&#8221;,
+&#8220;puppet-version&#8221;: &#8220;3.0.1&#8221;,
+&#8220;receive-time&#8221;: &#8220;2012-10-26T22:39:35.305Z&#8221;,
+&#8220;configuration-version&#8221;: &#8220;1351291174&#8221;,
+&#8220;start-time&#8221;: &#8220;2012-10-26T22:39:31.000Z&#8221;,
+&#8220;hash&#8221;: &#8220;cd4e5fd8846bac26d15d151664a40e0f2fa600b0&#8221;,
+&#8220;certname&#8221;: &#8220;foo.local&#8221;,
+&#8220;report-format&#8221;: 4,
+&#8220;transaction-uuid&#8221;: null
+}</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+<p>]</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-puppetdb.v3.resources">
+<span id="puppetdb-v3-resources-module"></span><h2>puppetdb.v3.resources module<a class="headerlink" href="#module-puppetdb.v3.resources" title="Permalink to this headline">¶</a></h2>
+<p>resources.py: A bunch of API methods for interacting with v3 resources in the PuppetDB API.</p>
+<dl class="function">
+<dt id="puppetdb.v3.resources.get_resources">
+<tt class="descclassname">puppetdb.v3.resources.</tt><tt class="descname">get_resources</tt><big>(</big><em>api_url=None</em>, <em>query=''</em>, <em>verify=False</em>, <em>cert=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#puppetdb.v3.resources.get_resources" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns resources</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>api_url</strong> &#8211; Base PuppetDB API url</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="puppetdb.v3.resources.get_resources_by_name">
+<tt class="descclassname">puppetdb.v3.resources.</tt><tt class="descname">get_resources_by_name</tt><big>(</big><em>api_url=None</em>, <em>resource_name=None</em>, <em>verify=False</em>, <em>cert=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#puppetdb.v3.resources.get_resources_by_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns facts by name</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>api_url</strong> &#8211; Base PuppetDB API url</li>
+<li><strong>resource_name</strong> &#8211; Name of resource</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="puppetdb.v3.resources.get_resources_by_name_and_value">
+<tt class="descclassname">puppetdb.v3.resources.</tt><tt class="descname">get_resources_by_name_and_value</tt><big>(</big><em>api_url=None</em>, <em>resource_name=None</em>, <em>resource_value=None</em>, <em>verify=False</em>, <em>cert=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#puppetdb.v3.resources.get_resources_by_name_and_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns resources by name and value</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>api_url</strong> &#8211; Base PuppetDB API url</li>
+<li><strong>resource_name</strong> &#8211; Name of fact</li>
+<li><strong>resource_value</strong> &#8211; Value of fact</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-puppetdb.v3.server_time">
+<span id="puppetdb-v3-server-time-module"></span><h2>puppetdb.v3.server_time module<a class="headerlink" href="#module-puppetdb.v3.server_time" title="Permalink to this headline">¶</a></h2>
+<p>fact_names.py: A bunch of API methods for interacting with v3 server time in the PuppetDB API.</p>
+<dl class="function">
+<dt id="puppetdb.v3.server_time.get_server_time">
+<tt class="descclassname">puppetdb.v3.server_time.</tt><tt class="descname">get_server_time</tt><big>(</big><em>api_url=None</em>, <em>verify=False</em>, <em>cert=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#puppetdb.v3.server_time.get_server_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns fact names</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>api_url</strong> &#8211; Base PuppetDB API url</td>
+</tr>
+</tbody>
+</table>
+<p>Response</p>
+<dl class="docutils">
+<dt>{</dt>
+<dd>&#8220;server-time&#8221;: &#8220;2013-09-20T20:54:27.472Z&#8221;</dd>
+</dl>
+<p>}</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-puppetdb.v3.version">
+<span id="puppetdb-v3-version-module"></span><h2>puppetdb.v3.version module<a class="headerlink" href="#module-puppetdb.v3.version" title="Permalink to this headline">¶</a></h2>
+<p>version.py: A bunch of API methods for interacting with v3 server version in the PuppetDB API.</p>
+<p>The response will be in application/json, and will return a JSON map with a single key: version, whose value is a string representation of the version of the running PuppetDB server.</p>
+<p>{&#8220;version&#8221;: &#8220;X.Y.Z&#8221;}</p>
+<dl class="function">
+<dt id="puppetdb.v3.version.get_version">
+<tt class="descclassname">puppetdb.v3.version.</tt><tt class="descname">get_version</tt><big>(</big><em>api_url=None</em>, <em>verify=False</em>, <em>cert=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#puppetdb.v3.version.get_version" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns server version</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>api_url</strong> &#8211; Base PuppetDB API url</td>
+</tr>
+</tbody>
+</table>
+<p>Response</p>
+<dl class="docutils">
+<dt>{</dt>
+<dd>{&#8220;version&#8221;: &#8220;X.Y.Z&#8221;}</dd>
+</dl>
+<p>}</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-puppetdb.v3">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-puppetdb.v3" title="Permalink to this headline">¶</a></h2>
+<p>__init__.py: init for v3 api calls.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">puppetdb.v3 package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-puppetdb.v3.aggregate_event_counts">puppetdb.v3.aggregate_event_counts module</a></li>
+<li><a class="reference internal" href="#module-puppetdb.v3.catalogs">puppetdb.v3.catalogs module</a></li>
+<li><a class="reference internal" href="#module-puppetdb.v3.event_counts">puppetdb.v3.event_counts module</a></li>
+<li><a class="reference internal" href="#module-puppetdb.v3.events">puppetdb.v3.events module</a></li>
+<li><a class="reference internal" href="#module-puppetdb.v3.fact_names">puppetdb.v3.fact_names module</a></li>
+<li><a class="reference internal" href="#module-puppetdb.v3.facts">puppetdb.v3.facts module</a></li>
+<li><a class="reference internal" href="#module-puppetdb.v3.metrics">puppetdb.v3.metrics module</a></li>
+<li><a class="reference internal" href="#module-puppetdb.v3.nodes">puppetdb.v3.nodes module</a></li>
+<li><a class="reference internal" href="#module-puppetdb.v3.reports">puppetdb.v3.reports module</a></li>
+<li><a class="reference internal" href="#module-puppetdb.v3.resources">puppetdb.v3.resources module</a></li>
+<li><a class="reference internal" href="#module-puppetdb.v3.server_time">puppetdb.v3.server_time module</a></li>
+<li><a class="reference internal" href="#module-puppetdb.v3.version">puppetdb.v3.version module</a></li>
+<li><a class="reference internal" href="#module-puppetdb.v3">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="puppetdb.v2.html"
+                        title="previous chapter">puppetdb.v2 package</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="puppetdb.v4.html"
+                        title="next chapter">puppetdb.v4 package</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/puppetdb.v3.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="puppetdb.v4.html" title="puppetdb.v4 package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="puppetdb.v2.html" title="puppetdb.v2 package"
+             >previous</a> |</li>
+        <li><a href="index.html">python-puppetdb 1.0.0 documentation</a> &raquo;</li>
+          <li><a href="modules.html" >&lt;no title&gt;</a> &raquo;</li>
+          <li><a href="puppetdb.html" >puppetdb package</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, monk-ee.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>
