@@ -23,7 +23,6 @@
 """__init__.py: Init for unit testing this module."""
 
 __author__ = "monkee"
-__license__ = "GPL"
 __maintainer__ = "monk-ee"
 __email__ = "magic.monkee.magic@gmail.com"
 __status__ = "Development"
